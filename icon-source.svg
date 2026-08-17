@@ -1,0 +1,62 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bfe3f5"/>
+      <stop offset="45%" stop-color="#f7e2c4"/>
+      <stop offset="100%" stop-color="#c78f56"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e0aa71"/>
+      <stop offset="100%" stop-color="#b87f45"/>
+    </linearGradient>
+    <radialGradient id="stonePink" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f2a9bb"/>
+    </radialGradient>
+    <radialGradient id="stoneBlue" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#a9d6e0"/>
+    </radialGradient>
+    <radialGradient id="stoneYellow" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f2d179"/>
+    </radialGradient>
+    <linearGradient id="die" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f0e6d8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <ellipse cx="256" cy="360" rx="230" ry="140" fill="url(#wood)"/>
+  <ellipse cx="256" cy="350" rx="230" ry="132" fill="none" stroke="#a06f3a" stroke-width="4" opacity="0.35"/>
+
+  <!-- pastel stones scattered -->
+  <circle cx="120" cy="330" r="34" fill="url(#stonePink)" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="168" cy="392" r="30" fill="url(#stoneBlue)" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="392" cy="330" r="34" fill="url(#stoneBlue)" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="344" cy="392" r="30" fill="url(#stoneYellow)" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="256" cy="410" r="28" fill="url(#stonePink)" stroke="#ffffff" stroke-width="3"/>
+
+  <!-- two dice in the center -->
+  <g transform="translate(176,150) rotate(-8)">
+    <rect x="0" y="0" width="120" height="120" rx="26" fill="url(#die)" stroke="#e8b98a" stroke-width="4"/>
+    <circle cx="30" cy="30" r="10" fill="#e8608a"/>
+    <circle cx="90" cy="30" r="10" fill="#e8608a"/>
+    <circle cx="30" cy="90" r="10" fill="#e8608a"/>
+    <circle cx="90" cy="90" r="10" fill="#e8608a"/>
+    <circle cx="60" cy="60" r="10" fill="#e8608a"/>
+  </g>
+  <g transform="translate(250,190) rotate(10)">
+    <rect x="0" y="0" width="112" height="112" rx="24" fill="url(#die)" stroke="#e8b98a" stroke-width="4"/>
+    <circle cx="28" cy="28" r="9" fill="#f2a154"/>
+    <circle cx="84" cy="28" r="9" fill="#f2a154"/>
+    <circle cx="28" cy="84" r="9" fill="#f2a154"/>
+    <circle cx="84" cy="84" r="9" fill="#f2a154"/>
+    <circle cx="56" cy="56" r="9" fill="#f2a154"/>
+    <circle cx="28" cy="56" r="9" fill="#f2a154"/>
+  </g>
+
+  <!-- soft sun glow top -->
+  <circle cx="392" cy="108" r="46" fill="#ffffff" opacity="0.55"/>
+</svg>

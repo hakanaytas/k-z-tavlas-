@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Kız Tavlası 🎲❤️</title>
+<meta name="description" content="Sıcak, sade ve modern; tamamen özgün bir çevrimiçi zar oyunu — Kız Tavlası." />
+<meta name="theme-color" content="#e8b98a" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading-screen" class="screen active">
+  <div class="loader-wrap">
+    <div class="loader-die">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <h1 class="brand">Kız Tavlası</h1>
+    <p class="loader-text">Masa hazırlanıyor…</p>
+  </div>
+</div>
+
+<!-- Login -->
+<div id="login-screen" class="screen">
+  <div class="glass-card login-card fade-up">
+    <h1 class="brand">Kız Tavlası <span>🎲❤️</span></h1>
+    <p class="subtitle">Oynamaya başlamak için ismini yaz</p>
+    <input id="name-input" class="input" type="text" maxlength="16" placeholder="İsmin…" autocomplete="off" />
+    <button id="start-btn" class="btn btn-primary" disabled>Başla</button>
+  </div>
+</div>
+
+<!-- Main menu -->
+<div id="menu-screen" class="screen">
+  <div class="menu-wrap fade-up">
+    <h1 class="brand small">Kız Tavlası <span>🎲❤️</span></h1>
+    <p class="greeting">Merhaba, <span id="menu-name">Oyuncu</span> 👋</p>
+    <div class="menu-grid">
+      <button class="menu-btn glass-card" id="create-room-btn">
+        <span class="menu-emoji">❤️</span><span>Oda Oluştur</span>
+      </button>
+      <button class="menu-btn glass-card" data-nav="join-room-screen">
+        <span class="menu-emoji">🎲</span><span>Odaya Katıl</span>
+      </button>
+      <button class="menu-btn glass-card" id="stats-nav-btn">
+        <span class="menu-emoji">🏆</span><span>İstatistikler</span>
+      </button>
+      <button class="menu-btn glass-card" data-nav="settings-screen">
+        <span class="menu-emoji">⚙</span><span>Ayarlar</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Create room -->
+<div id="create-room-screen" class="screen">
+  <div class="glass-card room-card fade-up">
+    <button class="back-btn" data-nav="menu-screen">‹ Menü</button>
+    <h2>Oda Oluşturuldu</h2>
+    <p class="hint">Bu kodu arkadaşınla paylaş</p>
+    <div class="room-code" id="room-code-display">------</div>
+    <button class="btn btn-ghost" id="copy-code-btn">Kodu Kopyala</button>
+    <div class="room-players" id="create-room-players"></div>
+    <button class="btn btn-primary" id="ready-btn-host" disabled>Hazırım</button>
+  </div>
+</div>
+
+<!-- Join room -->
+<div id="join-room-screen" class="screen">
+  <div class="glass-card room-card fade-up">
+    <button class="back-btn" data-nav="menu-screen">‹ Menü</button>
+    <h2>Odaya Katıl</h2>
+    <p class="hint">Oda kodunu gir</p>
+    <input id="join-code-input" class="input code-input" type="text" maxlength="6" placeholder="ABC123" autocomplete="off" />
+    <button class="btn btn-primary" id="join-btn">Katıl</button>
+    <div id="join-error" class="error-text"></div>
+    <div class="room-players" id="join-room-players"></div>
+    <button class="btn btn-primary hidden" id="ready-btn-guest" disabled>Hazırım</button>
+  </div>
+</div>
+
+<!-- Starting roll -->
+<div id="starting-screen" class="screen">
+  <div class="glass-card fade-up starting-card">
+    <h2>Kim Başlayacak?</h2>
+    <p class="hint" id="starting-hint">Sırayla zar atın, büyük gelen başlasın</p>
+    <div class="starting-rolls">
+      <div class="starting-roll">
+        <div class="mini-die" id="my-start-die">?</div>
+        <span id="my-start-name">Sen</span>
+      </div>
+      <span class="vs">VS</span>
+      <div class="starting-roll">
+        <div class="mini-die" id="opp-start-die">?</div>
+        <span id="opp-start-name">Rakip</span>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="starting-roll-btn">Zar At</button>
+  </div>
+</div>
+
+<!-- Game screen -->
+<div id="game-screen" class="screen">
+  <div class="board-wrap">
+    <div class="top-bar">
+      <button class="icon-btn" id="leave-game-btn">‹</button>
+      <div class="turn-indicator" id="turn-indicator">Sıra bekleniyor…</div>
+      <button class="icon-btn" id="chat-toggle-btn">💬</button>
+    </div>
+
+    <div id="opponent-banner" class="opponent-banner hidden">Rakip bağlantısı koptu, bekleniyor…</div>
+
+    <div class="board glass-card">
+      <div class="player-row opp-row">
+        <div class="player-tag" id="opp-tag">Rakip</div>
+        <div class="towers" id="opp-towers"></div>
+        <div class="side-zone">
+          <div class="ready-zone" id="opp-ready"><span class="zone-label">Hazır</span><span class="zone-count">0</span></div>
+          <div class="exit-zone" id="opp-exit"><span class="zone-label">Çıkış</span><span class="zone-count">0</span></div>
+        </div>
+      </div>
+
+      <div class="center-area">
+        <div class="dice-area" id="dice-area">
+          <div class="die" id="die-1">-</div>
+          <div class="die" id="die-2">-</div>
+        </div>
+        <button class="btn btn-primary btn-roll" id="roll-btn">Zar At</button>
+        <div class="moves-hint" id="moves-hint"></div>
+      </div>
+
+      <div class="player-row me-row">
+        <div class="side-zone">
+          <div class="ready-zone me-ready" id="me-ready"><span class="zone-label">Hazır</span><span class="zone-count">0</span></div>
+          <div class="exit-zone me-exit" id="me-exit"><span class="zone-label">Çıkış</span><span class="zone-count">0</span></div>
+        </div>
+        <div class="towers" id="me-towers"></div>
+        <div class="player-tag" id="me-tag">Sen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat panel -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <span>Sohbet</span>
+      <button class="icon-btn" id="chat-close-btn">✕</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-quick" id="chat-quick">
+      <button data-emoji="😊">😊</button>
+      <button data-emoji="❤️">❤️</button>
+      <button data-emoji="😂">😂</button>
+      <button data-emoji="👏">👏</button>
+      <button data-emoji="👍">👍</button>
+      <button data-emoji="🎉">🎉</button>
+    </div>
+    <form id="chat-form" class="chat-form">
+      <input id="chat-input" class="input" type="text" maxlength="200" placeholder="Mesaj yaz…" autocomplete="off" />
+      <button type="submit" class="btn btn-primary chat-send">Gönder</button>
+    </form>
+  </div>
+</div>
+
+<!-- End screen -->
+<div id="end-screen" class="screen">
+  <div class="end-wrap fade-up">
+    <div class="trophy-pop" id="trophy-pop">🏆</div>
+    <h1 id="end-title">Kazandın!</h1>
+    <p id="end-subtitle" class="hint">Tebrikler</p>
+    <div class="end-stats">
+      <div class="end-stat-card glass-card">
+        <span id="end-me-name">Sen</span>
+        <strong id="end-me-record">0G 0M</strong>
+      </div>
+      <div class="end-stat-card glass-card">
+        <span id="end-opp-name">Rakip</span>
+        <strong id="end-opp-record">0G 0M</strong>
+      </div>
+    </div>
+    <div class="end-actions">
+      <button class="btn btn-primary" id="rematch-btn">Tekrar Oyna</button>
+      <button class="btn btn-ghost" id="end-menu-btn">Ana Menü</button>
+    </div>
+  </div>
+  <div id="confetti-layer"></div>
+</div>
+
+<!-- Stats screen -->
+<div id="stats-screen" class="screen">
+  <div class="glass-card room-card fade-up">
+    <button class="back-btn" data-nav="menu-screen">‹ Menü</button>
+    <h2>İstatistiklerim</h2>
+    <div class="stats-grid">
+      <div class="stat-box"><strong id="stat-games">0</strong><span>Oyun</span></div>
+      <div class="stat-box"><strong id="stat-wins">0</strong><span>Galibiyet</span></div>
+      <div class="stat-box"><strong id="stat-rate">%0</strong><span>Kazanma</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings -->
+<div id="settings-screen" class="screen">
+  <div class="glass-card room-card fade-up">
+    <button class="back-btn" data-nav="menu-screen">‹ Menü</button>
+    <h2>Ayarlar</h2>
+    <label class="setting-row">
+      <span>🔊 Ses Efektleri</span>
+      <input type="checkbox" id="sound-toggle" checked />
+    </label>
+    <label class="setting-row">
+      <span>👤 İsim</span>
+      <input type="text" id="settings-name-input" class="input" maxlength="16" />
+    </label>
+    <button class="btn btn-primary" id="save-settings-btn">Kaydet</button>
+    <div id="settings-saved" class="saved-text hidden">Kaydedildi ✓</div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- Sounds -->
+<audio id="snd-dice" src="sounds/snd-dice.wav" preload="auto"></audio>
+<audio id="snd-stone" src="sounds/snd-stone.wav" preload="auto"></audio>
+<audio id="snd-win" src="sounds/snd-win.wav" preload="auto"></audio>
+<audio id="snd-message" src="sounds/snd-message.wav" preload="auto"></audio>
+<audio id="snd-open" src="sounds/snd-open.wav" preload="auto"></audio>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

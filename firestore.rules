@@ -1,0 +1,52 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Kullanıcı profilleri / istatistikler ---
+    match /users/{uid} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == uid;
+      // Kendi profilini güncelleyebilir; istatistik alanları rakibin
+      // zafer/mağlubiyet güncellemesi sırasında da (increment) yazılabilir,
+      // bu yüzden yalnızca uid'nin kendi belgesi olmasını zorunlu kılmıyoruz.
+      allow update: if request.auth != null;
+    }
+
+    // --- Oyun odaları ---
+    match /rooms/{code} {
+      allow read: if request.auth != null;
+
+      allow create: if request.auth != null
+        && request.resource.data.players.keys().hasAll([request.auth.uid])
+        && request.resource.data.players.keys().size() == 1;
+
+      // Katılan oyuncu kendini ekleyebilir, ya da odadaki mevcut
+      // iki oyuncudan biri oyun durumunu güncelleyebilir.
+      allow update: if request.auth != null && (
+        request.auth.uid in resource.data.players.keys() ||
+        (request.resource.data.players.keys().size() == resource.data.players.keys().size() + 1
+          && request.auth.uid in request.resource.data.players.keys())
+      );
+
+      allow delete: if false;
+
+      // --- Sohbet mesajları ---
+      match /messages/{messageId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null
+          && request.resource.data.uid == request.auth.uid
+          && request.auth.uid in get(/databases/$(database)/documents/rooms/$(code)).data.players.keys();
+        allow update, delete: if false;
+      }
+    }
+  }
+}
+
+// NOT: Bu oyun istemci taraflı (client-authoritative) çalışır — hamle mantığı
+// tarayıcıda hesaplanır ve Firestore'a yazılır. Yukarıdaki kurallar yalnızca
+// odadaki oyuncuların kendi odalarına yazabilmesini sağlar; hamlelerin oyun
+// kurallarına uygunluğunu (ör. bir kuleden olduğundan fazla taş indirilmesi)
+// sunucu tarafında doğrulamaz. Yarışmalı / hileye kapalı bir sürüm için bu
+// mantığın bir Cloud Function'a taşınması ve Firestore yazmalarının yalnızca
+// o fonksiyon üzerinden yapılması önerilir.
